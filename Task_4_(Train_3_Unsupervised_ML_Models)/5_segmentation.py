@@ -3,17 +3,85 @@ import pandas as pd
 import numpy as np
 import joblib
 
-
+# Load pre-trained models and features
 scaler = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/scaler.pkl")
 pca = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/pca.pkl")
 kmeans = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/kmeans.pkl")
 features = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/features.pkl")
 
+st.title("**Country Segmentation app**")
+st.write("Enter your Country inputs to cluster it")
 
-# X_new_scaled = scaler.transform(X_new)
+# Reference visual assets
+st.image("image_e8253d.png")
+st.image("image_e828df.png")
 
-# X_new_pca = pca.transform(X_new_scaled)
+# Group inputs into a form to prevent app refresh on every keystroke
+with st.form("country_data_form"):
+    st.subheader("Macroeconomic & Environmental Indicators")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        agri_val = st.number_input("Agriculture, Forestry, and Fishing Value Added (% of GDP)", format="%.6f")
+        carbon_int = st.number_input("Carbon Intensity of GDP (kg CO2e)", format="%.6f")
+        health_exp = st.number_input("Current Health Expenditure (% of GDP)", format="%.6f")
+        fertility = st.number_input("Fertility Rate (Total births per woman)", format="%.6f")
+        forest_area = st.number_input("Forest Area (% of land area)", format="%.6f")
+        gdp_growth = st.number_input("GDP Growth (Annual %)", format="%.6f")
+        industry_val = st.number_input("Industry Value Added (% of GDP)", format="%.6f")
+        pop_growth = st.number_input("Population Growth (Annual %)", format="%.6f")
+        renew_elec = st.number_input("Renewable Electricity Output (%)", format="%.6f")
+        
+    with col2:
+        renew_energy = st.number_input("Renewable Energy Consumption (%)", format="%.6f")
+        services_val = st.number_input("Services Value Added (% of GDP)", format="%.6f")
+        unemployment = st.number_input("Unemployment Total (%)", format="%.6f")
+        socio_idx = st.number_input("Socioeconomic Development Index", format="%.6f")
+        energy_idx = st.number_input("Energy & Environmental Index", format="%.6f")
+        
+        # Changed to accept raw values instead of logged values
+        fdi_raw = st.number_input("Foreign Direct Investment", format="%.6f")
+        inflation_raw = st.number_input("Inflation", format="%.6f")
+        gdp_capita_raw = st.number_input("GDP per Capita", format="%.6f")
 
-# cluster = kmeans.predict(X_new_pca)
+    submit_button = st.form_submit_button(label="Predict Cluster")
 
-st.title("hello world")
+if submit_button:
+    # Apply log transformations to the raw inputs
+    fdi_log = np.sign(fdi_raw) * np.log1p(np.abs(fdi_raw))
+    inflation_log = np.sign(inflation_raw) * np.log1p(np.abs(inflation_raw))
+    gdp_capita_log = np.sign(gdp_capita_raw) * np.log1p(np.abs(gdp_capita_raw))
+
+    # Map user inputs to the exact feature names expected by the scaler
+    input_dict = {
+        "agriculture_forestry_and_fishing_value_added_of_gdp": [agri_val],
+        "carbon_intensity_of_gdp_kg_co2e_per_constant_2015_us_of_gdp": [carbon_int],
+        "current_health_expenditure_of_gdp": [health_exp],
+        "fertility_rate_total_births_per_woman": [fertility],
+        "forest_area_of_land_area": [forest_area],
+        "gdp_growth_annual_": [gdp_growth],
+        "industry_including_construction_value_added_of_gdp": [industry_val],
+        "population_growth_annual_": [pop_growth],
+        "renewable_electricity_output_of_total_electricity_output": [renew_elec],
+        "renewable_energy_consumption_of_total_final_energy_consumption": [renew_energy],
+        "services_value_added_of_gdp": [services_val],
+        "unemployment_total_of_total_labor_force_modeled_ilo_estimate": [unemployment],
+        "Socioeconomic_developmen_Index": [socio_idx],
+        "Energy_Environmental_Index": [energy_idx],
+        "fdi_log": [fdi_log],
+        "inflation_log": [inflation_log],
+        "gdp_per_capita_constant_2015_us_log": [gdp_capita_log]
+    }
+    
+    X_new = pd.DataFrame(input_dict)
+    
+    # Ensure column order matches the original training features exactly
+    X_new = X_new[features]
+    
+    # Process pipeline
+    X_new_scaled = scaler.transform(X_new)
+    X_new_pca = pca.transform(X_new_scaled)
+    cluster = kmeans.predict(X_new_pca)
+    
+    st.success(f"**Prediction Results:** This country maps to **Cluster {cluster[0]}**")
