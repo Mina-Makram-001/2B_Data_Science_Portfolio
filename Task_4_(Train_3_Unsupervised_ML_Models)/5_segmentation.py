@@ -10,11 +10,11 @@ kmeans = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/kmeans.pkl")
 features = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/features.pkl")
 
 st.title("**Country Segmentation app**")
-st.write("Enter your Country inputs to cluster it")
+st.write("Enter your Country inputs to cluster. ;)")
 
 # Reference visual assets
-st.image("image_e8253d.png")
-st.image("image_e828df.png")
+st.image(r"Task_4_(Train_3_Unsupervised_ML_Models)\output\Cluster.png")
+st.image(r"Task_4_(Train_3_Unsupervised_ML_Models)\output\Silhouettet.png")
 
 # Group inputs into a form to prevent app refresh on every keystroke
 with st.form("country_data_form"):
@@ -35,12 +35,12 @@ with st.form("country_data_form"):
         
     with col2:
         renew_energy = st.number_input("Renewable Energy Consumption (%)", format="%.6f")
+        school_enroll = st.number_input("School Enrollment, Primary (% Gross)", format="%.6f") # Added new feature here
         services_val = st.number_input("Services Value Added (% of GDP)", format="%.6f")
         unemployment = st.number_input("Unemployment Total (%)", format="%.6f")
         socio_idx = st.number_input("Socioeconomic Development Index", format="%.6f")
         energy_idx = st.number_input("Energy & Environmental Index", format="%.6f")
         
-        # Changed to accept raw values instead of logged values
         fdi_raw = st.number_input("Foreign Direct Investment", format="%.6f")
         inflation_raw = st.number_input("Inflation", format="%.6f")
         gdp_capita_raw = st.number_input("GDP per Capita", format="%.6f")
@@ -48,12 +48,12 @@ with st.form("country_data_form"):
     submit_button = st.form_submit_button(label="Predict Cluster")
 
 if submit_button:
-    # Apply log transformations to the raw inputs
+    # Apply the simplified signed log-modulus transformations to the raw inputs
     fdi_log = np.sign(fdi_raw) * np.log1p(np.abs(fdi_raw))
     inflation_log = np.sign(inflation_raw) * np.log1p(np.abs(inflation_raw))
     gdp_capita_log = np.sign(gdp_capita_raw) * np.log1p(np.abs(gdp_capita_raw))
 
-    # Map user inputs to the exact feature names expected by the scaler
+    # Map user inputs to the exact 18 feature names expected by the model
     input_dict = {
         "agriculture_forestry_and_fishing_value_added_of_gdp": [agri_val],
         "carbon_intensity_of_gdp_kg_co2e_per_constant_2015_us_of_gdp": [carbon_int],
@@ -65,6 +65,7 @@ if submit_button:
         "population_growth_annual_": [pop_growth],
         "renewable_electricity_output_of_total_electricity_output": [renew_elec],
         "renewable_energy_consumption_of_total_final_energy_consumption": [renew_energy],
+        "school_enrollment_primary_gross": [school_enroll],
         "services_value_added_of_gdp": [services_val],
         "unemployment_total_of_total_labor_force_modeled_ilo_estimate": [unemployment],
         "Socioeconomic_developmen_Index": [socio_idx],
