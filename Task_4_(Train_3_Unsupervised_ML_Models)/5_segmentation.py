@@ -86,3 +86,70 @@ if submit_button:
     cluster = kmeans.predict(X_new_pca)
     
     st.success(f"**Prediction Results:** This country maps to **Cluster {cluster[0]}**")
+
+#--------------------------------------------------------------------------------------------
+#                               Connect the ML to an LLM
+#--------------------------------------------------------------------------------------------
+import os
+from dotenv import load_dotenv
+from google import genai
+
+load_dotenv()
+
+# Store client and chat in session_state to maintain conversation history across rerun triggers
+if "client" not in st.session_state:
+    st.session_state.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+if "chat" not in st.session_state:
+    st.session_state.chat = st.session_state.client.chats.create(
+        model="gemini-3.6-flash"  # Updated to supported model
+    )
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Send the input metrics & predicted cluster to Gemini when form is submitted
+if submit_button:
+    context_payload = (
+        f"[SYSTEM CONTEXT UPDATE]\n"
+        f"The user ran the country segmentation model with the following inputs:\n"
+        f"- Assigned Cluster: {cluster[0]}\n"
+        f"- GDP per Capita: ${gdp_capita_raw:,.2f}\n"
+        f"- Inflation Rate: {inflation_raw}%\n"
+        f"- Unemployment: {unemployment}%\n"
+        f"- Socioeconomic Development Index: {socio_idx}\n"
+        f"- Energy & Environmental Index: {energy_idx}\n"
+        f"- Renewable Energy Consumption: {renew_energy}%\n"
+        # --- Add extra inputs below ---
+        f"- Agriculture Value Added: {agri_val}%\n"
+        f"- Health Expenditure: {health_exp}%\n"
+        f"- Fertility Rate: {fertility}\n"
+        f"- School Enrollment: {school_enroll}%\n"
+        f"- Foreign Direct Investment: ${fdi_raw:,.2f}\n"
+        f"Use these details to answer any questions the user asks."
+    )
+    st.session_state.chat.send_message(context_payload)
+
+# UI Elements for Chat
+st.divider()
+st.subheader("💬 Ask Gemini About This Cluster")
+
+# Display prior chat messages
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
+
+# Capture user input and generate responses
+if user_prompt := st.chat_input("Ask a question about the cluster analysis..."):
+    st.session_state.messages.append({"role": "user", "content": user_prompt})
+    with st.chat_message("user"):
+        st.markdown(user_prompt)
+
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            response = st.session_state.chat.send_message(user_prompt)
+            st.markdown(response.text)
+
+    st.session_state.messages.append(
+        {"role": "assistant", "content": response.text}
+    )
