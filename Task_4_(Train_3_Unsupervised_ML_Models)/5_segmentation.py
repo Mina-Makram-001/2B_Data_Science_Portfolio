@@ -120,7 +120,6 @@ if submit_button:
         f"- Socioeconomic Development Index: {socio_idx}\n"
         f"- Energy & Environmental Index: {energy_idx}\n"
         f"- Renewable Energy Consumption: {renew_energy}%\n"
-        # --- Add extra inputs below ---
         f"- Agriculture Value Added: {agri_val}%\n"
         f"- Health Expenditure: {health_exp}%\n"
         f"- Fertility Rate: {fertility}\n"

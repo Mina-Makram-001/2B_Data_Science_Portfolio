@@ -1,0 +1,36 @@
+
+==================== Cluster_1 ====================
+
+  Top 3 Defining High Characteristics:
+    - carbon_intensity_of_gdp_kg_co2e_per_constant_2015_us_of_gdp [Other]: 1.4101
+    - industry_including_construction_value_added_of_gdp [Other]: 1.3749
+    - inflation_original [Other]: 0.9348
+
+  Top 3 Defining Low Characteristics:
+    - forest_area_of_land_area [Other]: -1.4132
+    - renewable_electricity_output_of_total_electricity_output [Other]: -1.3000
+    - school_enrollment_primary_gross [Other]: -1.1755
+
+==================== Cluster_2 ====================
+
+  Top 3 Defining High Characteristics:
+    - services_value_added_of_gdp [Other]: 1.4134
+    - current_health_expenditure_of_gdp [Other]: 1.4058
+    - fdi_original [Other]: 1.3607
+
+  Top 3 Defining Low Characteristics:
+    - inflation_original [Other]: -1.3864
+    - population_growth_annual_ [Other]: -1.3030
+    - fertility_rate_total_births_per_woman [Other]: -0.9937
+
+==================== Cluster_3 ====================
+
+  Top 3 Defining High Characteristics:
+    - gdp_growth_annual_ [Other]: 1.4125
+    - agriculture_forestry_and_fishing_value_added_of_gdp [Other]: 1.3890
+    - renewable_energy_consumption_of_total_final_energy_consumption [Other]: 1.3810
+
+  Top 3 Defining Low Characteristics:
+    - Energy_Environmental_Index [Other]: -1.4104
+    - Socioeconomic_developmen_Index [Other]: -1.3886
+    - unemployment_total_of_total_labor_force_modeled_ilo_estimate [Other]: -1.2615
