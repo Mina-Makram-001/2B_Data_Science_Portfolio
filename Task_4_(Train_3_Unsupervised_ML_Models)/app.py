@@ -4,17 +4,13 @@ import numpy as np
 import joblib
 
 # Load pre-trained models and features
-scaler = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/scaler.pkl")
-pca = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/pca.pkl")
-kmeans = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/kmeans.pkl")
-features = joblib.load("Task_4_(Train_3_Unsupervised_ML_Models)/features.pkl")
+scaler = joblib.load(r"D:\Projects\2B_Data_Science_Portfolio\Task_4_(Train_3_Unsupervised_ML_Models)\notebooks\scaler.pkl")
+pca = joblib.load(r"D:\Projects\2B_Data_Science_Portfolio\Task_4_(Train_3_Unsupervised_ML_Models)\notebooks\pca.pkl")
+kmeans = joblib.load(r"D:\Projects\2B_Data_Science_Portfolio\Task_4_(Train_3_Unsupervised_ML_Models)\notebooks\kmeans.pkl")
+features = joblib.load(r"D:\Projects\2B_Data_Science_Portfolio\Task_4_(Train_3_Unsupervised_ML_Models)\notebooks\features.pkl")
 
 st.title("**Country Segmentation app**")
 st.write("Enter your Country inputs to cluster. ;)")
-
-# Reference visual assets
-st.image(r"Task_4_(Train_3_Unsupervised_ML_Models)\output\Cluster.png")
-st.image(r"Task_4_(Train_3_Unsupervised_ML_Models)\output\Silhouettet.png")
 
 # Group inputs into a form to prevent app refresh on every keystroke
 with st.form("country_data_form"):
