@@ -16,7 +16,7 @@ During this internship, I transitioned from foundational data analytics to build
 
 ## 📂 Projects Overview
 
-Below is a breakdown of the four primary tasks completed during the internship, along with their core objectives and top insights. Click on any repository name to view the source code and complete project documentation.
+Below is a breakdown of the three primary tasks completed during the internship, along with their core objectives and top insights. Click on any repository name to view the source code and complete project documentation.
 
 ### 1. Countries Clustering (Machine Learning, LLM & RAG) ⭐⭐⭐
 **Repository:** [Py_Countries_Clustering_ML_LLM_RAG](https://github.com/Mina-Makram-001/Py_Countries_Clustering_ML_LLM_RAG)
